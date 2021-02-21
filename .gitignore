@@ -1,0 +1,4 @@
+*terraform*
+*.zip
+pvars.tfvars
+**/mineddit
