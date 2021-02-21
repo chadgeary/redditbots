@@ -1,5 +1,5 @@
 # Short alpha-numeric label for created AWS resources
-aws_prefix = "minddit"
+aws_prefix = "mineddit"
 aws_region = "us-east-1"
 
 # Authentication profile, not root
