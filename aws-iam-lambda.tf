@@ -30,6 +30,15 @@ resource "aws_iam_policy" "mineddit-lambda-policy-2" {
         "dynamodb:DescribeTable",
         "dynamodb:Scan"
       ],
+      "Resource": ["${aws_dynamodb_table.mineddit-dynamodb.arn}"]
+    },
+    {
+      "Sid": "LambdaComprehend",
+      "Effect": "Allow",
+      "Action": [
+        "comprehend:DetectDominantLanguage",
+        "comprehend:DetectSentiment"
+      ],
       "Resource": ["*"]
     }
   ]

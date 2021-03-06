@@ -18,6 +18,9 @@ comment_toplimit = "10"
 dynamo_readcapacity = 5
 dynamo_writecapacity = 5
 
+# Comprehend character limit, AWS bills at 100 character increments, 300 character minimum, 7102 bytes maximum (and UTF8 max character is 4 bytes)
+comprehend_charlimit = 1700
+
 # How often to invoke the function
 schedule_unit = "hours"
 schedule_count = 12

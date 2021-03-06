@@ -53,6 +53,10 @@ variable "praw_clientsecret" {
   type                    = string
 }
 
+variable "comprehend_charlimit" {
+  type                    = number
+}
+
 variable "dynamo_readcapacity" {
   type                    = number
 }

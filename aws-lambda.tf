@@ -1,7 +1,7 @@
 resource "aws_lambda_function" "mineddit-lambda" {
   filename                = data.archive_file.mineddit-archive.output_path
   source_code_hash        = data.archive_file.mineddit-archive.output_base64sha256
-  function_name           = "${var.aws_prefix}-lambda-function-${random_string.aws_suffix.result}"
+  function_name           = "${var.aws_prefix}-${var.reddit_subreddit}-${random_string.aws_suffix.result}"
   role                    = aws_iam_role.mineddit-role-lambda.arn
   kms_key_arn             = aws_kms_key.mineddit-kms-lambda.arn
   memory_size             = var.function_memory
@@ -17,6 +17,7 @@ resource "aws_lambda_function" "mineddit-lambda" {
       TOPLIMIT                = var.comment_toplimit
       SUBREDDIT               = var.reddit_subreddit
       PREFIX                  = var.aws_prefix
+      COMPREHENDCHARLIMIT     = var.comprehend_charlimit
       SUFFIX                  = random_string.aws_suffix.result
     }
   }

@@ -1,5 +1,5 @@
 # Overview
-Lambda polls subreddit comments and stores to DynamoDB via Cloudwatch EventBridge schedule.
+Cloudwatch EventBridge schedules Lambda to poll a subreddit top comments via Python3 praw module, evaluates sentiment with AWS Comprehend, then stores to DynamoDB.
 
 # Requirements
 - AWS Account with an Admin IAM user set, e.g.: `file ~/.aws/credentials`
