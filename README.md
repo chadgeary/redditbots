@@ -10,6 +10,9 @@ Mineddit is a serverless tool to scrape reddit post top comments, evaluate senti
 
 # Deploy
 ```
+# Clone and change directory
+git clone https://github.com/chadgeary/mineddit && cd mineddit
+
 # Create function directory, copy .py, install praw module
 mkdir -p ./mineddit
 cp mineddit.py ./mineddit
