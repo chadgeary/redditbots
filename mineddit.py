@@ -25,7 +25,7 @@ def lambda_handler(event, context):
                 sentiment = comprehend.detect_sentiment(Text=top_level_comment.body[:int(os.environ['COMPREHENDCHARLIMIT'])],LanguageCode='en')['Sentiment']
 
                 # Comment and Sentiment into dict
-                comments_and_sentiments[top_level_comment.body] = str(sentiment)
+                comments_and_sentiments[top_level_comment.body] = sentiment
 
             batch.put_item(
                 Item={

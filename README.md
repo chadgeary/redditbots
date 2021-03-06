@@ -1,6 +1,8 @@
 # Overview
 Cloudwatch EventBridge schedules Lambda to poll a subreddit top comments via Python3 praw module, evaluates sentiment with AWS Comprehend, then stores to DynamoDB.
 
+![DynamoDBConsole](dynamodbconsole.png)
+
 # Requirements
 - AWS Account with an Admin IAM user set, e.g.: `file ~/.aws/credentials`
 - [Reddit App](https://github.com/reddit-archive/reddit/wiki/OAuth2-Quick-Start-Example#first-steps) clientid + clientsecret
