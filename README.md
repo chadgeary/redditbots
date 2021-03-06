@@ -1,5 +1,5 @@
 # Overview
-Cloudwatch EventBridge schedules Lambda to poll a subreddit top comments via Python3 praw module, evaluates sentiment with AWS Comprehend, then stores to DynamoDB.
+Mineddit is a serverless tool to scrape reddit post top comments, evaluate sentiment (positive, neutral, negative, mixed) and store the results. Mineddit uses Cloudwatch EventBridge, Lambda, Comprehend, and DynamoDB - deployed via Terraform. Reddit is scraped with the `praw` python module.
 
 ![DynamoDBConsole](dynamodbconsole.png)
 
