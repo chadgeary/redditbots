@@ -1,8 +1,8 @@
-data "aws_iam_policy" "mineddit-lambda-policy-1" {
+data "aws_iam_policy" "sentiment-lambda-policy-1" {
   arn                     = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-resource "aws_iam_policy" "mineddit-lambda-policy-2" {
+resource "aws_iam_policy" "sentiment-lambda-policy-2" {
   name                    = "${var.aws_prefix}-lambda-policy-${random_string.aws_suffix.result}"
   path                    = "/"
   description             = "Lambda Dynamo and KMS"
@@ -18,7 +18,7 @@ resource "aws_iam_policy" "mineddit-lambda-policy-2" {
         "kms:GenerateDataKey*",
         "kms:DescribeKey"
       ],
-      "Resource": ["${aws_kms_key.mineddit-kms-lambda.arn}"]
+      "Resource": ["${aws_kms_key.sentiment-kms-lambda.arn}"]
     },
     {
       "Sid": "LambdaDynamo",
@@ -30,7 +30,7 @@ resource "aws_iam_policy" "mineddit-lambda-policy-2" {
         "dynamodb:DescribeTable",
         "dynamodb:Scan"
       ],
-      "Resource": ["${aws_dynamodb_table.mineddit-dynamodb.arn}"]
+      "Resource": ["${aws_dynamodb_table.sentiment-dynamodb.arn}"]
     },
     {
       "Sid": "LambdaComprehend",
@@ -47,7 +47,7 @@ EOF
 }
 
 # Lambda Role
-resource "aws_iam_role" "mineddit-role-lambda" {
+resource "aws_iam_role" "sentiment-role-lambda" {
   name                    = "${var.aws_prefix}-role-lambda-${random_string.aws_suffix.result}"
   path                    = "/"
   assume_role_policy      = <<EOF
@@ -68,12 +68,12 @@ EOF
 }
 
 # Lambda Role Attachments
-resource "aws_iam_role_policy_attachment" "mineddit-lambda-policy-1-attach" {
-  role                    = aws_iam_role.mineddit-role-lambda.name
-  policy_arn              = data.aws_iam_policy.mineddit-lambda-policy-1.arn
+resource "aws_iam_role_policy_attachment" "sentiment-lambda-policy-1-attach" {
+  role                    = aws_iam_role.sentiment-role-lambda.name
+  policy_arn              = data.aws_iam_policy.sentiment-lambda-policy-1.arn
 }
 
-resource "aws_iam_role_policy_attachment" "mineddit-lambda-policy-2-attach" {
-  role                    = aws_iam_role.mineddit-role-lambda.name
-  policy_arn              = aws_iam_policy.mineddit-lambda-policy-2.arn
+resource "aws_iam_role_policy_attachment" "sentiment-lambda-policy-2-attach" {
+  role                    = aws_iam_role.sentiment-role-lambda.name
+  policy_arn              = aws_iam_policy.sentiment-lambda-policy-2.arn
 }

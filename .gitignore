@@ -1,4 +1,9 @@
-*terraform*
-*.zip
-pvars.tfvars
-**/mineddit
+**/sentiment/function
+**/sentiment/*terraform*
+/sentiment/function.zip
+/sentiment/pvars.tfvars
+
+**/removalwatch/function
+**/removalwatch/*terraform*
+/removalwatch/function.zip
+/removalwatch/pvars.tfvars

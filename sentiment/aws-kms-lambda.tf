@@ -1,21 +1,21 @@
-resource "aws_kms_key" "mineddit-kms-dynamodb" {
-  description             = "KMS CMK for DynamoDB"
+resource "aws_kms_key" "sentiment-kms-lambda" {
+  description             = "KMS CMK for Lambda"
   key_usage               = "ENCRYPT_DECRYPT"
   customer_master_key_spec = "SYMMETRIC_DEFAULT"
   enable_key_rotation     = "true"
   tags                    = {
-    Name                  = "${var.aws_prefix}-kmscmk-dynamodb-${random_string.aws_suffix.result}"
+    Name                  = "${var.aws_prefix}-kmscmk-lambda-${random_string.aws_suffix.result}"
   }
   policy                  = <<EOF
 {
-  "Id": "mineddit-kms-dynamodb",
+  "Id": "sentiment-kms-lambda",
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "Enable Dynamo",
+      "Sid": "Enable Lambda",
       "Effect": "Allow",
       "Principal": {
-        "AWS": "*"
+        "AWS": "${aws_iam_role.sentiment-role-lambda.arn}"
       },
       "Action": [
         "kms:Encrypt",
@@ -27,8 +27,7 @@ resource "aws_kms_key" "mineddit-kms-dynamodb" {
       "Resource": "*",
       "Condition": {
         "StringEquals": {
-          "kms:CallerAccount": "${data.aws_caller_identity.aws-account.account_id}",
-          "kms:ViaService": "dynamodb.${var.aws_region}.amazonaws.com"
+          "kms:CallerAccount": "${data.aws_caller_identity.aws-account.account_id}"
         }
       }
     },
@@ -46,7 +45,7 @@ resource "aws_kms_key" "mineddit-kms-dynamodb" {
 EOF
 }
 
-resource "aws_kms_alias" "mineddit-kms-dynamodb-alias" {
-  name                    = "alias/${var.aws_prefix}-kmscmk-dynamodb-${random_string.aws_suffix.result}"
-  target_key_id           = aws_kms_key.mineddit-kms-dynamodb.key_id
+resource "aws_kms_alias" "sentiment-kms-lambda-alias" {
+  name                    = "alias/${var.aws_prefix}-kmscmk-lambda-${random_string.aws_suffix.result}"
+  target_key_id           = aws_kms_key.sentiment-kms-lambda.key_id
 }

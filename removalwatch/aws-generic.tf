@@ -53,15 +53,19 @@ variable "praw_clientsecret" {
   type                    = string
 }
 
-variable "comprehend_charlimit" {
-  type                    = number
-}
-
 variable "dynamo_readcapacity" {
   type                    = number
 }
 
 variable "dynamo_writecapacity" {
+  type                    = number
+}
+
+variable "dynamodeleted_readcapacity" {
+  type                    = number
+}
+
+variable "dynamodeleted_writecapacity" {
   type                    = number
 }
 
@@ -73,10 +77,10 @@ variable "schedule_unit" {
   type                    = string
 }
 
-variable "function_concurrentexecutions" {
+variable "function_memory" {
   type                    = number
 }
 
-variable "function_memory" {
+variable "function_timeoutsec" {
   type                    = number
 }

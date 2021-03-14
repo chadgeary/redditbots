@@ -1,27 +1,8 @@
 # Overview
-Mineddit is a serverless tool to scrape reddit post top comments, evaluate sentiment (positive, neutral, negative, mixed) and store the results. Mineddit uses Cloudwatch EventBridge, Lambda, Comprehend, and DynamoDB - deployed via Terraform. Reddit is scraped with the `praw` python module.
+A collection of microservices for interacting with [Reddit](https://reddit.com). Deployments are automated via Terraform into AWS cloud.
 
-![DynamoDBConsole](dynamodbconsole.png)
+# Getting Started
+See the sub-directory for each microservice for deployment and customization instructions.
 
-# Requirements
-- AWS Account with an Admin IAM user set, e.g.: `file ~/.aws/credentials`
-- [Reddit App](https://github.com/reddit-archive/reddit/wiki/OAuth2-Quick-Start-Example#first-steps) clientid + clientsecret
-- Terraform installed
-
-# Deploy
-```
-# Clone and change directory
-git clone https://github.com/chadgeary/mineddit && cd mineddit
-
-# Create function directory, copy .py, install praw module
-mkdir -p ./mineddit
-cp mineddit.py ./mineddit
-pip3 install --upgrade --target ./mineddit/ praw
-
-# Customize variables
-cat aws.tfvars
-
-# Initialize terraform and apply
-terraform init
-terraform apply -var-file="aws.tfvars"
-```
+* `sentiment` evaluates top comments, returning `positive`, `neutral`, `negative`, or `mixed` - using AWS Comprehend NLP.
+* `removalwatch` periodically captures popular posts removed through moderator actions - similar to [FrontpageWatch](https://www.reddit.com/user/FrontpageWatch/).

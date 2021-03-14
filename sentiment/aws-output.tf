@@ -1,4 +1,4 @@
-output "mineddit-output" {
+output "sentiment-output" {
   value = <<OUTPUT
 ### Console Links ###
 Function Logs: https://console.aws.amazon.com/cloudwatch/home?region=${var.aws_region}#logsV2:log-groups/log-group/$252Faws$252Flambda$252F${var.aws_prefix}-${var.reddit_subreddit}-${random_string.aws_suffix.result}
