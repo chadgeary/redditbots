@@ -76,3 +76,7 @@ variable "schedule_unit" {
 variable "function_memory" {
   type                    = number
 }
+
+variable "target_words" {
+  type                    = string
+}

@@ -13,11 +13,12 @@ resource "aws_lambda_function" "sentiment-lambda" {
     variables               = {
       CLIENTID                = var.praw_clientid
       CLIENTSECRET            = var.praw_clientsecret
+      COMPREHENDCHARLIMIT     = var.comprehend_charlimit
       HOTLIMIT                = var.reddit_hotlimit
       TOPLIMIT                = var.comment_toplimit
       SUBREDDIT               = var.reddit_subreddit
+      TARGETWORDS             = var.target_words
       PREFIX                  = var.aws_prefix
-      COMPREHENDCHARLIMIT     = var.comprehend_charlimit
       SUFFIX                  = random_string.aws_suffix.result
     }
   }

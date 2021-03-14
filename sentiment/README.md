@@ -1,5 +1,5 @@
 # Overview
-`sentiment` is a service to periodically scrape (sub)reddit posts' top comments, evaluate sentiment (positive, neutral, negative, mixed) and store the results. Deployed automatically via Terraform, `sentiment` uses Cloudwatch EventBridge (scheduler), Lambda (execution), Comprehend (sentiment), and DynamoDB (storage). Lambda interfaces with reddit via the `praw` python module.
+`sentiment` is a service to periodically scrape (sub)reddit posts' top comments, evaluate sentiment (positive, neutral, negative, mixed) if a comment containts target word(s) and store the results. Deployed automatically via Terraform, `sentiment` uses Cloudwatch EventBridge (scheduler), Lambda (execution), Comprehend (sentiment), and DynamoDB (storage). Lambda interfaces with reddit via the `praw` python module.
 
 ![DynamoDBConsole](dynamodbconsole.png)
 
