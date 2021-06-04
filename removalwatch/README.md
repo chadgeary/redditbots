@@ -28,3 +28,6 @@ terraform apply -var-file="aws.tfvars"
 # After apply, see terraform output for useful AWS console links, or
 terraform output
 ```
+
+# Contact Me
+https://discord.gg/paNwty8zXV
