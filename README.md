@@ -6,3 +6,6 @@ See the sub-directory for each microservice for deployment and customization ins
 
 * `sentiment` evaluates top comments, returning `positive`, `neutral`, `negative`, or `mixed` - using AWS Comprehend NLP.
 * `removalwatch` periodically captures popular posts removed through moderator actions - similar to [FrontpageWatch](https://www.reddit.com/user/FrontpageWatch/).
+
+# Contact Me
+https://discord.gg/paNwty8zXV
