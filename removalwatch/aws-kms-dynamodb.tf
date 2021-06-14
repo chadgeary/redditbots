@@ -1,12 +1,12 @@
 resource "aws_kms_key" "removalwatch-kms-dynamodb" {
-  description             = "KMS CMK for DynamoDB"
-  key_usage               = "ENCRYPT_DECRYPT"
+  description              = "KMS CMK for DynamoDB"
+  key_usage                = "ENCRYPT_DECRYPT"
   customer_master_key_spec = "SYMMETRIC_DEFAULT"
-  enable_key_rotation     = "true"
-  tags                    = {
-    Name                  = "${var.aws_prefix}-kmscmk-dynamodb-${random_string.aws_suffix.result}"
+  enable_key_rotation      = "true"
+  tags = {
+    Name = "${var.aws_prefix}-kmscmk-dynamodb-${random_string.aws_suffix.result}"
   }
-  policy                  = <<EOF
+  policy = <<EOF
 {
   "Id": "removalwatch-kms-dynamodb",
   "Version": "2012-10-17",
@@ -47,6 +47,6 @@ EOF
 }
 
 resource "aws_kms_alias" "removalwatch-kms-dynamodb-alias" {
-  name                    = "alias/${var.aws_prefix}-kmscmk-dynamodb-${random_string.aws_suffix.result}"
-  target_key_id           = aws_kms_key.removalwatch-kms-dynamodb.key_id
+  name          = "alias/${var.aws_prefix}-kmscmk-dynamodb-${random_string.aws_suffix.result}"
+  target_key_id = aws_kms_key.removalwatch-kms-dynamodb.key_id
 }

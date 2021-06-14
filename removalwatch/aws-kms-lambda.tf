@@ -1,12 +1,12 @@
 resource "aws_kms_key" "removalwatch-kms-lambda" {
-  description             = "KMS CMK for Lambda"
-  key_usage               = "ENCRYPT_DECRYPT"
+  description              = "KMS CMK for Lambda"
+  key_usage                = "ENCRYPT_DECRYPT"
   customer_master_key_spec = "SYMMETRIC_DEFAULT"
-  enable_key_rotation     = "true"
-  tags                    = {
-    Name                  = "${var.aws_prefix}-kmscmk-lambda-${random_string.aws_suffix.result}"
+  enable_key_rotation      = "true"
+  tags = {
+    Name = "${var.aws_prefix}-kmscmk-lambda-${random_string.aws_suffix.result}"
   }
-  policy                  = <<EOF
+  policy = <<EOF
 {
   "Id": "removalwatch-kms-lambda",
   "Version": "2012-10-17",
@@ -46,6 +46,6 @@ EOF
 }
 
 resource "aws_kms_alias" "removalwatch-kms-lambda-alias" {
-  name                    = "alias/${var.aws_prefix}-kmscmk-lambda-${random_string.aws_suffix.result}"
-  target_key_id           = aws_kms_key.removalwatch-kms-lambda.key_id
+  name          = "alias/${var.aws_prefix}-kmscmk-lambda-${random_string.aws_suffix.result}"
+  target_key_id = aws_kms_key.removalwatch-kms-lambda.key_id
 }

@@ -1,12 +1,12 @@
 data "aws_iam_policy" "removalwatch-lambda-policy-1" {
-  arn                     = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
 resource "aws_iam_policy" "removalwatch-lambda-policy-2" {
-  name                    = "${var.aws_prefix}-lambda-policy-${random_string.aws_suffix.result}"
-  path                    = "/"
-  description             = "Lambda Dynamo and KMS"
-  policy                  = <<EOF
+  name        = "${var.aws_prefix}-lambda-policy-${random_string.aws_suffix.result}"
+  path        = "/"
+  description = "Lambda Dynamo and KMS"
+  policy      = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -31,6 +31,14 @@ resource "aws_iam_policy" "removalwatch-lambda-policy-2" {
         "dynamodb:Scan"
       ],
       "Resource": ["${aws_dynamodb_table.removalwatch-dynamodb.arn}","${aws_dynamodb_table.removed-dynamodb.arn}"]
+    },
+    {
+      "Sid": "LambdaRemovedGet",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetItem"
+      ],
+      "Resource": ["${aws_dynamodb_table.removed-dynamodb.arn}"]
     }
   ]
 }
@@ -39,9 +47,9 @@ EOF
 
 # Lambda Role
 resource "aws_iam_role" "removalwatch-role-lambda" {
-  name                    = "${var.aws_prefix}-role-lambda-${random_string.aws_suffix.result}"
-  path                    = "/"
-  assume_role_policy      = <<EOF
+  name               = "${var.aws_prefix}-role-lambda-${random_string.aws_suffix.result}"
+  path               = "/"
+  assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -60,11 +68,11 @@ EOF
 
 # Lambda Role Attachments
 resource "aws_iam_role_policy_attachment" "removalwatch-lambda-policy-1-attach" {
-  role                    = aws_iam_role.removalwatch-role-lambda.name
-  policy_arn              = data.aws_iam_policy.removalwatch-lambda-policy-1.arn
+  role       = aws_iam_role.removalwatch-role-lambda.name
+  policy_arn = data.aws_iam_policy.removalwatch-lambda-policy-1.arn
 }
 
 resource "aws_iam_role_policy_attachment" "removalwatch-lambda-policy-2-attach" {
-  role                    = aws_iam_role.removalwatch-role-lambda.name
-  policy_arn              = aws_iam_policy.removalwatch-lambda-policy-2.arn
+  role       = aws_iam_role.removalwatch-role-lambda.name
+  policy_arn = aws_iam_policy.removalwatch-lambda-policy-2.arn
 }

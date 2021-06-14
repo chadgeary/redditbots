@@ -3,14 +3,13 @@ from boto3.dynamodb.conditions import Key, Attr
 import datetime
 import json
 import os
+from urllib3 import PoolManager
 import praw
 
 def lambda_handler(event, context):
     db = boto3.resource('dynamodb')
     table = db.Table(os.environ['PREFIX'] + '-' + os.environ['SUBREDDIT'] + '-' + os.environ['SUFFIX'])
-
-    removeddb = boto3.resource('dynamodb')
-    removedtable = removeddb.Table(os.environ['PREFIX'] + '-' + os.environ['SUBREDDIT'] + '-removed-' + os.environ['SUFFIX'])
+    removedtable = db.Table(os.environ['PREFIX'] + '-' + os.environ['SUBREDDIT'] + '-removed-' + os.environ['SUFFIX'])
 
     # Fetch previous submissions from db
     response = table.scan()
@@ -29,14 +28,7 @@ def lambda_handler(event, context):
     with table.batch_writer() as batch:
         position = 0
         for current_submission in reddit.subreddit(os.environ['SUBREDDIT']).hot(limit=int(os.environ['HOTLIMIT'])):
-
             position = position + 1
-            if position <= 1:
-                print(current_submission.author.name)
-                print(current_submission.is_robot_indexable)
-                print(current_submission.removed_by_category)
-                print(current_submission.selftext)
-
             batch.put_item(
                 Item={
                     'id': str(current_submission.id),
@@ -59,8 +51,37 @@ def lambda_handler(event, context):
         evaluate_submission = reddit.submission(previous_submission['id'])
 
         if evaluate_submission.author is None or evaluate_submission.is_robot_indexable is False or evaluate_submission.removed_by_category is not None or evaluate_submission.selftext == '[removed]' or evaluate_submission.selftext == '[deleted]':
-            print(evaluate_submission)
-            removedtable.put_item(Item=previous_submission)
+
+            print(evaluate_submission.id + ' has been removed!')
+
+            # Fetch previous removal
+            previous_removal_check = removedtable.get_item(
+                Key={'id': evaluate_submission.id }
+            )
+
+            # If no previous removal, put to removedtable
+            if 'Item' not in previous_removal_check:
+                print(evaluate_submission.id + " not previously stored, adding to 'removed' table.")
+                removedtable.put_item(Item=previous_submission)
+
+                # If discord webhook, post it
+                if os.environ['DISCORD_WEBHOOK'] != '':
+
+                    # Append evaluation checks to previous submission
+                    eval_checks = {'eval.author': str(evaluate_submission.author), 'eval.is_robot_indexable': str(evaluate_submission.is_robot_indexable), 'eval.removed_by_category': str(evaluate_submission.removed_by_category), 'eval.selftext': str(evaluate_submission.selftext)}
+                    previous_submission.update(eval_checks)
+                    post_data = json.dumps({'content': str(previous_submission)})
+                    print(post_data)
+
+                    # POST
+                    post_response = PoolManager().request(
+                        'POST',
+                        os.environ['DISCORD_WEBHOOK'],
+                        headers = {'Content-Type': 'application/json'},
+                        body = post_data,
+                        retries = False)
+                    print(post_response.status)
+                    print(post_response.data)
 
     return {
         'statusCode': 200,
