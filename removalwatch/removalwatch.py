@@ -12,7 +12,7 @@ def lambda_handler(event, context):
     removedtable = db.Table(os.environ['PREFIX'] + '-' + os.environ['SUBREDDIT'] + '-removed-' + os.environ['SUFFIX'])
 
     # Fetch previous submissions from db
-    print(str(datetime.datetime.utcnow()) + " Fetching previous submissions.")
+    print("Fetching previous submissions.")
     response = table.scan()
     previous_submissions = response['Items']
     while response.get('LastEvaluatedKey'):
@@ -26,7 +26,7 @@ def lambda_handler(event, context):
         client_secret=os.environ['CLIENTSECRET']
     )
 
-    print(str(datetime.datetime.utcnow()) + " Fetching " + os.environ['HOTLIMIT'] + " from " + os.environ['SUBREDDIT'])
+    print("Fetching " + os.environ['HOTLIMIT'] + " from " + os.environ['SUBREDDIT'])
     current_submissions = reddit.subreddit(os.environ['SUBREDDIT']).hot(limit=int(os.environ['HOTLIMIT']))
     bot_viewed = datetime.datetime.utcnow()
 
@@ -34,7 +34,7 @@ def lambda_handler(event, context):
         position = 0
         for current_submission in current_submissions:
             position = position + 1
-            print(str(datetime.datetime.utcnow()) + " Storing submission " + current_submission.id + "(" + str(position) + " of " + os.environ['HOTLIMIT'] + ")") 
+            print("Storing submission " + current_submission.id + " (" + str(position) + " of " + os.environ['HOTLIMIT'] + ")") 
             batch.put_item(
                 Item={
                     'id': str(current_submission.id),
@@ -53,7 +53,7 @@ def lambda_handler(event, context):
     # Evaluate previous for removals
     for previous_submission in previous_submissions:
 
-        print(str(datetime.datetime.utcnow()) + ' Evaluating: ' + previous_submission['id'])
+        print('Evaluating: ' + previous_submission['id'])
         evaluate_submission = reddit.submission(previous_submission['id'])
 
         if evaluate_submission.author is None or evaluate_submission.is_robot_indexable is False or evaluate_submission.removed_by_category is not None or evaluate_submission.selftext == '[removed]' or evaluate_submission.selftext == '[deleted]':
@@ -67,7 +67,7 @@ def lambda_handler(event, context):
 
             # If no previous removal, put to removedtable
             if 'Item' not in previous_removal_check:
-                print(str(datetime.datetime.utcnow()) + " " + evaluate_submission.id + " not previously stored, adding to 'removed' table.")
+                print(evaluate_submission.id + " not previously stored, adding to 'removed' table.")
                 removedtable.put_item(Item=previous_submission)
 
                 # If discord webhook, post it
