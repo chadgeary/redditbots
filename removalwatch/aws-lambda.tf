@@ -21,6 +21,7 @@ resource "aws_lambda_function" "removalwatch-lambda" {
       SUFFIX          = random_string.aws_suffix.result
     }
   }
+  depends_on = [aws_cloudwatch_log_group.removalwatch-cloudwatch-log-group]
 }
 
 resource "aws_lambda_alias" "removalwatch-lambda-alias" {

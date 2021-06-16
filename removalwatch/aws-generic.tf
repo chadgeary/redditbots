@@ -33,6 +33,9 @@ data "aws_iam_user" "aws-kmsmanager" {
   user_name = var.kms_manager
 }
 
+data "aws_partition" "aws-partition" {
+}
+
 variable "discord_webhook" {
   type    = string
   default = ""
@@ -88,4 +91,9 @@ variable "function_memory" {
 
 variable "function_timeoutsec" {
   type = number
+}
+
+variable "log_retention_days" {
+  type    = number
+  default = 30
 }
